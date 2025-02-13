@@ -17,7 +17,7 @@ class Ride:
     def moving(self):
         if self.start_moving is None:
             self.start_moving = time.time()
-            print("The taxi is Mooooviiing!!") #log
+            print("\033[92m🚗 The taxi is Mooooviiing!\033[0m") 
         self.moving_time()
         self.start_moving = None
 
@@ -25,7 +25,7 @@ class Ride:
         input("Press Enter to stop moving ")
         move_time = time.time()-self.start_moving
         self.time_moving += move_time
-        print(f"The taxi was moving for {move_time:.2f} seconds")
+        print(f"\033[92mThe taxi was moving for {move_time:.2f} seconds\033[0m")
         time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.info(f"Taxi in movement")
@@ -33,7 +33,7 @@ class Ride:
     def waiting(self):
         if self.start_waiting is None:
             self.start_waiting = time.time()
-            print("The taxi is waiting!!") #log
+            print("\033[93m⏱️ The taxi is waiting!\033[0m") # Log
         self.waiting_time()
         self.start_waiting = None
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -42,7 +42,7 @@ class Ride:
         input("Press Enter to stop waiting ")
         wait_time = time.time()-self.start_waiting
         self.time_waiting += wait_time
-        print(f"The taxi was waiting for {wait_time:.2f} seconds")
+        print(f"\033[93mThe taxi was waiting for {wait_time:.2f} seconds\033[0m")
         time.sleep(1.5)
 
     def update_rates(self):
@@ -53,11 +53,11 @@ class Ride:
                     self.moving_fare  = float(input("Please type the new rate when the taxi is moving: "))
                     self.waiting_fare = float(input("Please type the new rate when the taxi is stopped: "))
                     if self.moving_fare <= 0 or self.waiting_fare <= 0:
-                        print("Error. Rates must be greater than 0")
+                        print("\033[91mError. Rates must be greater than 0\033[0m")
                     else:
                         break
                 except ValueError:
-                    print("Invalid input. Please enter a valid number.")
+                    print("\033[91mInvalid input. Please enter a valid number.\033[0m")
         self.logger.info(f"Rates configured: Stopped={self.waiting_fare}, Moving={self.moving_fare}")
     
     def calculate_fare(self):
