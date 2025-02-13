@@ -1,45 +1,35 @@
 from Ride import Ride
 import time
 
+# Rates, con round y euro y Control de errores!!!!
+# history (y poner un if en menus) y logs y os clear
+
 class Program:
 
     def __init__(self):
         self.current_trip = None
 
     def start(self):
+        print("Welcome on board!")
+        print("The default fare while the taxi is stopped is 2 cents per second.") 
+        print("The default fare while the taxi is moving is 5 cents per second.") 
         self.current_trip = Ride()
-        print("Welcome and enjoy your trip")
-        self.moving()
-
-    def moving(self):
-        if self.current_trip.start_moving is None:
-            self.current_trip.start_moving = time.time()
-            print("The taxi is Mooooviiing!!") #log
-        self.moving_time()
-        self.current_trip.start_moving = None
-    
-    def moving_time(self):
-        input("Press Enter to stop moving ")
-        move_time = time.time()-self.current_trip.start_moving
-        self.current_trip.time_moving += move_time
-        print(f"The taxi was moving for {move_time}")
-
-    def waiting(self):
-        if self.current_trip.start_waiting is None:
-            self.current_trip.start_waiting = time.time()
-            print("The taxi is waiting!!") #log
-        self.waiting_time()
-        self.current_trip.start_waiting = None
-    
-    def waiting_time(self):
-        input("Press Enter to stop waiting ")
-        wait_time = time.time()-self.current_trip.start_waiting
-        self.current_trip.time_waiting += wait_time
-        print(f"The taxi was waiting for {wait_time}")
+        upd_fares = input("Press 0 if you want to change the rates or Enter to use the default ones: ")
+        if upd_fares == '0':
+            while True:
+                try:
+                    self.current_trip.moving_fare  = float(input("Please type the new rate when the taxi is moving: "))
+                    self.current_trip.waiting_fare = float(input("Please type the new rate when the taxi is stopped: "))
+                    if self.current_trip.moving_fare <= 0 or self.current_trip.waiting_fare <= 0:
+                        print("Error. Rates must be greater than 0")
+                    else:
+                        break
+                except ValueError:
+                    print("Invalid input. Please enter a valid number.") 
 
     def welcome(self):
-        print("\n***** Bienvenido al taximetro *****")
-        print("Este programa te permite calcular las tarifas de un taxi.")    
+        print("\n***** Welcome to the digital taximeter *****")
+        print("This program allows you to calculate taxi fares.")          
     
     def main_menu(self, custom_options):
         print("\n Select an option:")
@@ -48,8 +38,8 @@ class Program:
                         's': "Stop the taxi",
                         'm': "Move the taxi",
                         'e': "End the trip",
+                        'h': "Show the history",
                         'q': "Exit",
-                        'h': "History",
                     }
         for opt in options:
             if opt in custom_options:
@@ -62,39 +52,34 @@ class Program:
         return option
 
     def main(self):
+        # si autenticar devolvio true sigo el flujo
+        history = False
         while True:
-            self.welcome()
-            # si autenticar devolvio true sigo el flujo
-            option = self.main_menu(["t", "s", "m", "e", "q"])
+            if history != True:
+                self.welcome()
+                option = self.main_menu(["t", "q"])
             while True:
-                if option == "t":
+                if option == 't':
                     self.start()
                     option = self.main_menu(["s", "e", "q"])
-                if option in ['m','s','e']:
-                    if self.current_trip is None:
-                        print("Error. No trip in progress.") #+ log de error
-                        option = self.main_menu(["t", "q"])
-                    elif option == 'm':
-                        self.moving()
-                        option = self.main_menu(["s", "e", "q"])
-                    elif option == 's':
-                        self.waiting()
-                        option = self.main_menu(["m", "e", "q"])
-                    elif option == 'e':
-                        self.current_trip.calculate_fare()
-                        break
-                elif option == "q":
+                elif option == 'm':
+                    self.current_trip.moving()
+                    option = self.main_menu(["s", "e", "q"])
+                elif option == 's':
+                    self.current_trip.waiting()
+                    option = self.main_menu(["m", "e", "q"])
+                elif option == 'e':
+                    self.current_trip.calculate_fare()
+                    break
+                elif option == 'h':
+                    print("Mostrar historico")
+                    break #temporal
+                elif option == 'q':
                     exit()
-            print('Fuera del primer while')
-            option = self.main_menu(["t", "q"])
-            if(option == 'q'):
+            history = True
+            option = self.main_menu(['t', 'h', 'q'])
+            if option == 'q':
                 break
-            
-        
-             
-
-            
-
 
 if __name__ == "__main__":
     program = Program()
