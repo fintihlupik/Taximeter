@@ -64,14 +64,14 @@ class Ride:
         locale.setlocale(locale.LC_ALL, '')
         moving_fare = self.time_moving * self.moving_fare
         stopped_fare = self.time_waiting * self.waiting_fare
-        total_fare = locale.currency(stopped_fare + moving_fare)
+        total_fare = stopped_fare + moving_fare
         print(f"Total movement time: {self.time_moving:.2f} segundos")
         print(f"Total waiting time: {self.time_waiting:.2f} segundos")
-        print(f"Total fare: {total_fare}")
-        self.save_trip(total_fare)
+        print(f"Total fare: {locale.currency(total_fare)}")
+        self.save_trip(locale.currency(total_fare))
         time.sleep(2.7)
         os.system('cls' if os.name == 'nt' else 'clear')
-        self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={total_fare}")
+        self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={locale.currency(total_fare)}")
 
     def save_trip(self, total_fare):
             if not os.path.exists("logs"):
