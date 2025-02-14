@@ -5,14 +5,17 @@ import time
 import os
 import logging
 
+### Esta clase maneja el registro y el inicio de sesión de usuarios en una aplicación.
 class Login:
 
-    username = None
+    username = None #Variable de clase que almacena el nombre de usuario del usuario logueado.
 
     def __init__(self):
-        self.logger = logging.getLogger(self.__class__.__name__)  # Crea un logger con el nombre de Program
+        self.logger = logging.getLogger(self.__class__.__name__)  # Crea un logger con el nombre de la clase
         Login.username = None
 
+### Descripción: Registra un nuevo usuario en la base de datos.
+### Parámetros: Ninguno.
     def register_user(self):
         username = input("Enter your username: ")
 
@@ -23,7 +26,7 @@ class Login:
             print("\033[91mUsername already exists. Please choose another one.\033[0m")
             self.logger.warning(f"Existing username")
             time.sleep(1)
-            os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls' if os.name == 'nt' else 'clear') #  Limpia la pantalla y redirige al usuario al inicio de sesión.
             return self.register_user()
 
         password = getpass.getpass("Enter your password: ")
@@ -49,7 +52,8 @@ class Login:
         os.system('cls' if os.name == 'nt' else 'clear')
         self.login_user()
     
-                    
+### Descripción: Inicia sesión con un usuario existente.
+### Parámetros: attempts=3: Número de intentos permitidos para el inicio de sesión. Por defecto, son 3 intentos.
     def login_user(self, attempts=3):
         username = input("Enter your username: ")
         password = getpass.getpass("Enter your password: ")
@@ -82,10 +86,14 @@ class Login:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     self.goodbye()
                     time.sleep(1)
-            
+
+### Descripción: Hashea una contraseña usando SHA-256.
+### Parámetros: password: Contraseña a hashear 
     def hash_password(self,password):
         return hashlib.sha256(password.encode()).hexdigest()
 
+### Descripción: Muestra un mensaje de despedida y cierra la aplicación.
+### Parámetros: Ninguno.
     def goodbye(self):
         print("\033[95mGoodbye\033[0m")
         time.sleep(0.7)

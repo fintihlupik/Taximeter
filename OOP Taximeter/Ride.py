@@ -1,12 +1,14 @@
 import time
-import locale
+import locale # Para configurar el formato local, utilizado para mostrar cantidades monetarias.
 import os
 import datetime
 import logging
 from Login import Login
 import sqlite3
 
+### Hace el seguimiento de un viaje en taxi: el tiempo de movimiento y espera, el cálculo del costo total y el registro del viaje en la base de datos.
 class Ride:
+
     def __init__(self):
         self.time_waiting = 0
         self.time_moving = 0
@@ -16,6 +18,7 @@ class Ride:
         self.waiting_fare = 0.02
         self.logger = logging.getLogger(self.__class__.__name__)  # Crea un logger con el nombre de Program
 
+### Inicia o detiene el movimiento del taxi.
     def moving(self):
         if self.start_moving is None:
             self.start_moving = time.time()
@@ -23,15 +26,17 @@ class Ride:
         self.moving_time()
         self.start_moving = None
 
+### Calcula el tiempo que el taxi ha estado en movimiento.
     def moving_time(self):
         input("Press Enter to stop moving ")
-        move_time = time.time()-self.start_moving
+        move_time = time.time()-self.start_moving # llamo time para ver el tiempo actual
         self.time_moving += move_time
         print(f"\033[92mThe taxi was moving for {move_time:.2f} seconds\033[0m")
         time.sleep(1)
         os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.info(f"Taxi in movement")
 
+###  Inicia o detiene el estado de espera del taxi.
     def waiting(self):
         if self.start_waiting is None:
             self.start_waiting = time.time()
@@ -39,7 +44,8 @@ class Ride:
         self.waiting_time()
         self.start_waiting = None
         os.system('cls' if os.name == 'nt' else 'clear')
-    
+
+### Calcula el tiempo que el taxi ha estado esperando.
     def waiting_time(self):
         input("Press Enter to stop waiting ")
         wait_time = time.time()-self.start_waiting
@@ -47,6 +53,7 @@ class Ride:
         print(f"\033[93mThe taxi was waiting for {wait_time:.2f} seconds\033[0m")
         time.sleep(1)
 
+### Permite al usuario actualizar las tarifas por segundo para el movimiento y la espera.
     def update_rates(self):
         upd_fares = input("\nPress 0 if you want to change the rates or Enter to use the default ones: ")
         if upd_fares == '0':
@@ -61,7 +68,8 @@ class Ride:
                 except ValueError:
                     print("\033[91mInvalid input. Please enter a valid number.\033[0m")
         self.logger.info(f"Rates configured: Stopped={self.waiting_fare}, Moving={self.moving_fare}")
-    
+
+###  Calcula el costo total del viaje basándose en los tiempos de movimiento y espera.
     def calculate_fare(self):
         locale.setlocale(locale.LC_ALL, '')
         moving_fare = self.time_moving * self.moving_fare
@@ -76,6 +84,7 @@ class Ride:
         os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={locale.currency(total_fare)}")
 
+### Registra el viaje en un archivo de texto y en la base de datos.
     def save_trip(self, total_fare):
         if not os.path.exists("logs"):
             os.makedirs("logs")

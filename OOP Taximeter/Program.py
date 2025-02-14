@@ -6,9 +6,7 @@ from settings import create_tables
 from Login import Login
 import sqlite3
 
-# dependencias y requierements
-# emojis y colorines
-
+### Esta clase maneja la lógica principal del programa, incluyendo el menú, la autenticación y el inicio de viajes.
 class Program:
 
     def __init__(self):
@@ -16,6 +14,7 @@ class Program:
         self.logger = logging.getLogger(self.__class__.__name__)  # Crea un logger con el nombre de Program
         self.login = Login()
 
+### Inicia un nuevo viaje en taxi.
     def start(self):
         print("\033[95m🚕 Welcome on board!\033[0m")
         print("Default fare while stopped: 2 cents/sec")
@@ -26,12 +25,15 @@ class Program:
         print("\033[95mEnjoy the trip!\033[0m")
         time.sleep(0.7)
         os.system('cls' if os.name == 'nt' else 'clear')
-        self.current_trip.moving()
+        self.current_trip.moving() # El viaje comienza en movimiento
 
+### Muestra un mensaje de bienvenida al programa.
     def welcome(self):
         print("***** 🚕 Digital Taximeter *****")
         print("Calculate taxi fares easily\n")          
-    
+
+### Descripción: Muestra un menú con opciones personalizadas y devuelve la opción seleccionada por el usuario.
+### Parámetros: custom_options: Lista de opciones que se deben mostrar en el menú.
     def menu(self, custom_options):
         print("Select an option: ")
         options = {
@@ -56,6 +58,7 @@ class Program:
         os.system('cls' if os.name == 'nt' else 'clear')
         return option
     
+### Muestra el historial de viajes del usuario actual.
     def view_history(self):
         os.system('cls' if os.name == 'nt' else 'clear')      
         history_path = os.path.abspath("logs/rides_history.txt")
@@ -65,6 +68,7 @@ class Program:
         input("\nPress Enter to continue ")
         os.system('cls' if os.name == 'nt' else 'clear')
 
+### Obtiene el historial de viajes del usuario actual desde la base de datos.
     def fetch_history(self):
         try:
             conexion = sqlite3.connect('persistence/taxi.db')
@@ -83,12 +87,14 @@ class Program:
         finally:
             if conexion is not None:
                 conexion.close()
-    
+
+### Muestra el historial de viajes obtenido desde la base de datos
     def print_sql_history(self,rides,conexion):
         for ride in rides:
             print(f"Date: {ride[0]}, Total Fare: {ride[1]} €")
         conexion.close()
 
+### Muestra un mensaje de despedida y cierra el programa.
     def goodbye(self):
         print("\033[95mGoodbye\033[0m")
         time.sleep(0.7)
@@ -96,6 +102,7 @@ class Program:
         self.logger.info(f"Exiting the system")
         exit()
 
+### Maneja la autenticación del usuario según la opción seleccionada.
     def authenticate(self,option):
         if option == "1":
             self.login.login_user()
@@ -104,6 +111,7 @@ class Program:
         elif option == "q":
             self.goodbye()
 
+### Método principal que ejecuta la lógica del programa.
     def main(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         self.welcome()
