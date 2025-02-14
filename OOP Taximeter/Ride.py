@@ -77,19 +77,20 @@ class Ride:
         self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={locale.currency(total_fare)}")
 
     def save_trip(self, total_fare):
-            if not os.path.exists("logs"):
-                os.makedirs("logs")
-            with open("logs/rides_history.txt", "a", encoding="utf-8") as file:
-                file.write(f"Ride on {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - Total fare: {total_fare:.2f} €\n")
-            self.logger.info(f"Trip added to txt history")
+        if not os.path.exists("logs"):
+            os.makedirs("logs")
+        with open("logs/rides_history.txt", "a", encoding="utf-8") as file:
+            file.write(f"Ride on {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - Total fare: {total_fare:.2f} €\n")
+        self.logger.info(f"Trip added to txt history")
 
-            conexion = sqlite3.connect('persistence/taxi.db')
-            cursor = conexion.cursor()
-    
-            cursor.execute("INSERT INTO rides (user_id, date, total_fare) VALUES (?, ?, ?)", (Login.username,datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'), round(total_fare,2)))
-            conexion.commit()
-            conexion.close()
-            self.logger.info(f"Trip added to SQL history")
+        conexion = sqlite3.connect('persistence/taxi.db')
+        cursor = conexion.cursor()
+        cursor.execute("SELECT id FROM users WHERE username = ?", (Login.username,))
+        user_id = cursor.fetchone()
+        cursor.execute("INSERT INTO rides (user_id, date, total_fare) VALUES (?, ?, ?)", (user_id[0],datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'), round(total_fare,2)))
+        conexion.commit()
+        conexion.close()
+        self.logger.info(f"Trip added to SQL history")
 
 
 

@@ -60,16 +60,34 @@ class Program:
         os.system('cls' if os.name == 'nt' else 'clear')      
         history_path = os.path.abspath("logs/rides_history.txt")
         os.startfile(history_path) # para abrirlo con el editor del texto predeterminado del sistema
+        rides,conexion = self.fetch_history()
+        self.print_sql_history(rides,conexion)
+        input("\nPress Enter to continue ")
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-        conexion = sqlite3.connect('persistence/taxi.db')
-        cursor = conexion.cursor()
-        cursor.execute("SELECT date, total_fare FROM rides where user_id = ?", (Login.username,))
-        rides = cursor.fetchall()
+    def fetch_history(self):
+        try:
+            conexion = sqlite3.connect('persistence/taxi.db')
+            cursor = conexion.cursor()
+            cursor.execute("""
+                                SELECT r.date, r.total_fare 
+                                FROM rides r 
+                                JOIN users u ON r.user_id = u.id 
+                                WHERE u.username = ?
+                            """, (Login.username,))
+            rides = cursor.fetchall()
+            return rides, conexion
+        except Exception as e:
+            print(f"Error al obtener el historial: {e}")
+            return [], None
+        finally:
+            if conexion is not None:
+                conexion.close()
+    
+    def print_sql_history(self,rides,conexion):
         for ride in rides:
             print(f"Date: {ride[0]}, Total Fare: {ride[1]} €")
         conexion.close()
-        input("Press Enter to continue ")
-        os.system('cls' if os.name == 'nt' else 'clear')
 
     def goodbye(self):
         print("\033[95mGoodbye\033[0m")
@@ -79,23 +97,27 @@ class Program:
         exit()
 
     def authenticate(self,option):
-            if option == "1":
-                self.login.login_user()
-            elif option == "2":
-                self.login.register_user()
-            elif option == "q":
-                self.goodbye()
+        if option == "1":
+            self.login.login_user()
+        elif option == "2":
+            self.login.register_user()
+        elif option == "q":
+            self.goodbye()
 
     def main(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         self.welcome()
         option = self.menu(["1", "2", "q"])
         self.authenticate(option)
-        history = False
+        option = None
+        history,con = self.fetch_history()
+        #print(f" SELF HISTORY !!!  {history}")
         while True:
-            if history != True:
+            if not history:
                 self.welcome()
                 option = self.menu(["t", "q"])
+            elif not option:
+                option = self.menu(["t", "h" ,"q"])
             while True:
                 if option == 't':
                     self.start()
@@ -111,7 +133,7 @@ class Program:
                     break
                 elif option == 'h':
                     self.view_history()
-                    break #temporal
+                    break
                 elif option == 'q':
                     self.goodbye()
             history = True
