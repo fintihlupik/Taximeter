@@ -3,6 +3,8 @@ import locale
 import os
 import datetime
 import logging
+from Login import Login
+import sqlite3
 
 class Ride:
     def __init__(self):
@@ -26,7 +28,7 @@ class Ride:
         move_time = time.time()-self.start_moving
         self.time_moving += move_time
         print(f"\033[92mThe taxi was moving for {move_time:.2f} seconds\033[0m")
-        time.sleep(1.5)
+        time.sleep(1)
         os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.info(f"Taxi in movement")
 
@@ -43,10 +45,10 @@ class Ride:
         wait_time = time.time()-self.start_waiting
         self.time_waiting += wait_time
         print(f"\033[93mThe taxi was waiting for {wait_time:.2f} seconds\033[0m")
-        time.sleep(1.5)
+        time.sleep(1)
 
     def update_rates(self):
-        upd_fares = input("Press 0 if you want to change the rates or Enter to use the default ones: ")
+        upd_fares = input("\nPress 0 if you want to change the rates or Enter to use the default ones: ")
         if upd_fares == '0':
             while True:
                 try:
@@ -68,8 +70,9 @@ class Ride:
         print(f"Total movement time: {self.time_moving:.2f} segundos")
         print(f"Total waiting time: {self.time_waiting:.2f} segundos")
         print(f"Total fare: {locale.currency(total_fare)}")
-        self.save_trip(locale.currency(total_fare))
-        time.sleep(2.7)
+        self.save_trip(total_fare)
+        print()
+        input("Press Enter to continue ")
         os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={locale.currency(total_fare)}")
 
@@ -77,9 +80,20 @@ class Ride:
             if not os.path.exists("logs"):
                 os.makedirs("logs")
             with open("logs/rides_history.txt", "a", encoding="utf-8") as file:
-                file.write(f"Ride on {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - Total fare: {total_fare}\n")
-            self.logger.info(f"Trip added to history")
+                file.write(f"Ride on {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - Total fare: {total_fare:.2f} €\n")
+            self.logger.info(f"Trip added to txt history")
 
+            conexion = sqlite3.connect('persistence/taxi.db')
+            cursor = conexion.cursor()
+    
+            cursor.execute("INSERT INTO rides (user_id, date, total_fare) VALUES (?, ?, ?)", (Login.username,datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'), round(total_fare,2)))
+            conexion.commit()
+            conexion.close()
+            self.logger.info(f"Trip added to SQL history")
+
+
+
+    
 
     
 

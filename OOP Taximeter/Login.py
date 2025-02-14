@@ -8,13 +8,16 @@ import logging
 
 class Login:
 
+    username = None
+
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)  # Crea un logger con el nombre de Program
+        Login.username = None
 
     def register_user(self):
         username = input("Enter your username: ")
 
-        conexion = sqlite3.connect('taxi.db')
+        conexion = sqlite3.connect('persistence/taxi.db')
         cursor = conexion.cursor()
         cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         if cursor.fetchone():
@@ -42,8 +45,10 @@ class Login:
         
         print("\033[92mUser registered successfully.\033[0m")
         self.logger.info(f"User registered successfully.")
-        time.sleep(1)
+        print("Please log in")
+        time.sleep(1.2)
         os.system('cls' if os.name == 'nt' else 'clear')
+        self.login_user()
     
                     
     def login_user(self, attempts=3):
@@ -52,12 +57,13 @@ class Login:
 
         hashed_password = self.hash_password(password)  # Hash la contraseña ingresada
         
-        with sqlite3.connect('taxi.db') as conexion:
+        with sqlite3.connect('persistence/taxi.db') as conexion:
             cursor = conexion.cursor()
             
             cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, hashed_password))
             
             if cursor.fetchone():
+                Login.username = username  # Establece el usuario logueado = username
                 print("\033[92mLogin successful.\033[0m")
                 self.logger.debug(f"Login successful")
                 time.sleep(1)

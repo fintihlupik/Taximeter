@@ -4,8 +4,8 @@ import time
 import logging
 from settings import create_tables
 from Login import Login
+import sqlite3
 
-# autenticacion
 # dependencias y requierements
 # emojis y colorines
 
@@ -29,11 +29,11 @@ class Program:
         self.current_trip.moving()
 
     def welcome(self):
-        print("\n***** 🚕 Digital Taximeter *****")
-        print("Calculate taxi fares easily")          
+        print("***** 🚕 Digital Taximeter *****")
+        print("Calculate taxi fares easily\n")          
     
     def menu(self, custom_options):
-        print("Select an option:")
+        print("Select an option: ")
         options = {
                         '1': "Log in",
                         '2': "Sign up",
@@ -48,7 +48,7 @@ class Program:
             if opt in custom_options:
                 print(f"{opt}: {options[opt]}")
 
-        option = input("Choose an option: ")
+        option = input("\nChoose an option: ")
         while option not in custom_options:
             print("\033[91mInvalid option. Please choose again.\033[0m")
             option = input("Choose an option: ")
@@ -60,8 +60,15 @@ class Program:
         os.system('cls' if os.name == 'nt' else 'clear')      
         history_path = os.path.abspath("logs/rides_history.txt")
         os.startfile(history_path) # para abrirlo con el editor del texto predeterminado del sistema
-        self.logger.info(f"Showing the history")
-        time.sleep(3)
+
+        conexion = sqlite3.connect('persistence/taxi.db')
+        cursor = conexion.cursor()
+        cursor.execute("SELECT date, total_fare FROM rides where user_id = ?", (Login.username,))
+        rides = cursor.fetchall()
+        for ride in rides:
+            print(f"Date: {ride[0]}, Total Fare: {ride[1]} €")
+        conexion.close()
+        input("Press Enter to continue ")
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def goodbye(self):
