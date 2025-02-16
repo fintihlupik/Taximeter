@@ -61,7 +61,7 @@ class Program:
 ### Muestra el historial de viajes del usuario actual.
     def view_history(self):
         os.system('cls' if os.name == 'nt' else 'clear')      
-        history_path = os.path.abspath("logs/rides_history.txt")
+        history_path = f"persistence\\history\\{Login.username}_rides.txt"
         os.startfile(history_path) # para abrirlo con el editor del texto predeterminado del sistema
         rides,conexion = self.fetch_history()
         self.print_sql_history(rides,conexion)
@@ -149,6 +149,7 @@ if __name__ == "__main__":
     program = Program()
     create_tables()
     program.main()
+
 
 
 

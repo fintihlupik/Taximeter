@@ -100,9 +100,10 @@ class Ride:
 
 ### Registra el viaje en un archivo de texto y en la base de datos.
     def save_trip(self, total_fare):
-        if not os.path.exists("logs"):
-            os.makedirs("logs")
-        with open("logs/rides_history.txt", "a", encoding="utf-8") as file:
+        if not os.path.exists("persistence/history"):
+            os.makedirs("persistence/history")
+        history_path = f"persistence/history/{Login.username}_rides.txt"
+        with open( history_path, "a", encoding="utf-8") as file:
             file.write(f"Ride on {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - Total fare: {total_fare:.2f} €\n")
         self.logger.info(f"Trip added to txt history")
 
@@ -114,12 +115,3 @@ class Ride:
         conexion.commit()
         conexion.close()
         self.logger.info(f"Trip added to SQL history")
-
-
-
-    
-
-    
-
-
-    
