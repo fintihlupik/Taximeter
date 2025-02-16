@@ -16,7 +16,7 @@ class Program:
 
 ### Inicia un nuevo viaje en taxi.
     def start(self):
-        print("\033[95m🚕 Welcome on board!\033[0m")
+        print("\033[95m🚕 Welcome on board! 🚕\033[0m")
         print("Default fare while stopped: 2 cents/sec")
         print("Default fare while moving: 5 cents/sec") 
         self.current_trip = Ride()
@@ -25,17 +25,17 @@ class Program:
         print("\033[95mEnjoy the trip!\033[0m")
         time.sleep(0.7)
         os.system('cls' if os.name == 'nt' else 'clear')
-        self.current_trip.moving() # El viaje comienza en movimiento
+        return self.current_trip.moving() # El viaje comienza en movimiento
 
 ### Muestra un mensaje de bienvenida al programa.
     def welcome(self):
-        print("***** 🚕 Digital Taximeter *****")
+        print("***** 🚕 Digital Taximeter🚕 *****")
         print("Calculate taxi fares easily\n")          
 
 ### Descripción: Muestra un menú con opciones personalizadas y devuelve la opción seleccionada por el usuario.
 ### Parámetros: custom_options: Lista de opciones que se deben mostrar en el menú.
     def menu(self, custom_options):
-        print("Select an option: ")
+        print("\033[36mSelect an option: \033[0m")
         options = {
                         '1': "Log in",
                         '2': "Sign up",
@@ -119,7 +119,6 @@ class Program:
         self.authenticate(option)
         option = None
         history,con = self.fetch_history()
-        #print(f" SELF HISTORY !!!  {history}")
         while True:
             if not history:
                 self.welcome()
@@ -128,14 +127,11 @@ class Program:
                 option = self.menu(["t", "h" ,"q"])
             while True:
                 if option == 't':
-                    self.start()
-                    option = self.menu(["s", "e", "q"])
+                    option = self.start()
                 elif option == 'm':
-                    self.current_trip.moving()
-                    option = self.menu(["s", "e", "q"])
+                    option = self.current_trip.moving()
                 elif option == 's':
-                    self.current_trip.waiting()
-                    option = self.menu(["m", "e", "q"])
+                    option = self.current_trip.waiting()
                 elif option == 'e':
                     self.current_trip.calculate_fare()
                     break

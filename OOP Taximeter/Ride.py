@@ -22,36 +22,50 @@ class Ride:
     def moving(self):
         if self.start_moving is None:
             self.start_moving = time.time()
-            print("\033[92m🚗 The taxi is Mooooviiing!\033[0m") 
-        self.moving_time()
+            print("\033[92m🚗 The taxi is Mooooviiing!\033[0m 🚗") 
+        opt = self.moving_time()
         self.start_moving = None
+        print()
+        #os.system('cls' if os.name == 'nt' else 'clear')
+        if opt != '':
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return 'e' 
+        else:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return 's'      
 
 ### Calcula el tiempo que el taxi ha estado en movimiento.
     def moving_time(self):
-        input("Press Enter to stop moving ")
+        opt = input("Press Enter to stop moving or any key+Enter to end the trip ")
         move_time = time.time()-self.start_moving # llamo time para ver el tiempo actual
         self.time_moving += move_time
         print(f"\033[92mThe taxi was moving for {move_time:.2f} seconds\033[0m")
         time.sleep(1)
-        os.system('cls' if os.name == 'nt' else 'clear')
         self.logger.info(f"Taxi in movement")
+        return opt
 
 ###  Inicia o detiene el estado de espera del taxi.
     def waiting(self):
         if self.start_waiting is None:
             self.start_waiting = time.time()
-            print("\033[93m⏱️ The taxi is waiting!\033[0m") # Log
-        self.waiting_time()
+            print("\033[93m⏱️ The taxi is waiting!\033[0m ⏱️") # Log
+        opt = self.waiting_time()
         self.start_waiting = None
-        os.system('cls' if os.name == 'nt' else 'clear')
+        if opt != '':
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return 'e' 
+        else:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return 'm' 
 
 ### Calcula el tiempo que el taxi ha estado esperando.
     def waiting_time(self):
-        input("Press Enter to stop waiting ")
+        opt = input("Press Enter to stop waiting or any key+Enter to end the trip")
         wait_time = time.time()-self.start_waiting
         self.time_waiting += wait_time
         print(f"\033[93mThe taxi was waiting for {wait_time:.2f} seconds\033[0m")
         time.sleep(1)
+        return opt
 
 ### Permite al usuario actualizar las tarifas por segundo para el movimiento y la espera.
     def update_rates(self):
@@ -75,9 +89,9 @@ class Ride:
         moving_fare = self.time_moving * self.moving_fare
         stopped_fare = self.time_waiting * self.waiting_fare
         total_fare = stopped_fare + moving_fare
-        print(f"Total movement time: {self.time_moving:.2f} segundos")
-        print(f"Total waiting time: {self.time_waiting:.2f} segundos")
-        print(f"Total fare: {locale.currency(total_fare)}")
+        print(f"\033[94mTotal movement time: {self.time_moving:.2f} seconds\033[0m")
+        print(f"\033[94mTotal waiting time: {self.time_waiting:.2f} seconds\033[0m")
+        print(f"\033[94mTotal fare: {locale.currency(total_fare)}\033[0m")
         self.save_trip(total_fare)
         print()
         input("Press Enter to continue ")
