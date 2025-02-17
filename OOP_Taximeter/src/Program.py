@@ -1,3 +1,4 @@
+import sys
 from src.Ride import Ride
 import os
 import time
@@ -5,6 +6,7 @@ import logging
 from src.settings import create_tables
 from src.Login import Login
 import sqlite3
+import subprocess
 
 ### Esta clase maneja la lógica principal del programa, incluyendo el menú, la autenticación y el inicio de viajes.
 class Program:
@@ -63,7 +65,18 @@ class Program:
         os.system('cls' if os.name == 'nt' else 'clear')      
 
         history_path = os.path.abspath(f"persistence\\history\\{Login.username}_rides.txt")
-        os.startfile(history_path) # para abrirlo con el editor del texto predeterminado del sistema
+      
+        try:
+            if sys.platform == 'win32':
+                os.startfile(history_path)
+            elif sys.platform == 'darwin':  # macOS
+                subprocess.call(('open', history_path))
+            else:  # Linux
+                subprocess.run(["xdg-open", history_path], check=True)
+        except FileNotFoundError:
+            print(f"Cannot open file {history_path}. The command to open the file is not available.")
+        except Exception as e:
+            print(f"Could not find a suitable application to open the file.: {e}")
         rides,conexion = self.fetch_history()
         self.print_sql_history(rides,conexion)
         input("\nPress Enter to continue ")
