@@ -7,7 +7,7 @@ El Taximetro digital es un proyecto en Python que implementa las siguientes func
 - Calcular tarifa mientras el taxi está en movimiento.
 - Finalizar un trayecto y muestra el total en euros.
 - Permitir iniciar un nuevo trayecto sin cerrar el programa.
-- 
+  
 ## Implementación
 A nivel de implementación utiliza:
 - El enfoque orientado a objetos
@@ -32,7 +32,7 @@ Pasos a seguir en el terminal para su ejecución (asegurate de tener Docker corr
    
 4. Construir la imagen
    
-  `docker build -t taximeterfintihlupik .`
+     `docker build -t taximeterfintihlupik .`
   
 5. Crear y ejecutar un nuevo contenedor a partir de la imagen
    
