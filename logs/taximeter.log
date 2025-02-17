@@ -1,0 +1,20 @@
+17-02-2025 20:46:22.794 - root - DEBUG - Tables exist
+17-02-2025 20:46:31.883 - Login - INFO - User registered successfully.
+17-02-2025 20:46:35.985 - Login - DEBUG - Login successful
+17-02-2025 20:46:39.854 - Ride - INFO - Rates configured: Stopped=0.02, Moving=0.05
+17-02-2025 20:46:39.854 - Program - INFO - Ride starts
+17-02-2025 20:46:42.578 - Ride - INFO - Taxi in movement
+17-02-2025 20:46:44.581 - Ride - INFO - Taxi is waiting
+17-02-2025 20:46:44.632 - Ride - INFO - Trip added to txt history
+17-02-2025 20:46:44.641 - Ride - INFO - Trip added to SQL history
+17-02-2025 20:46:54.011 - Ride - DEBUG - Trip ended. Stopped fare=0.02 sec, Moving fare=0.05 sec, Total=0,07 €
+17-02-2025 21:04:58.138 - Program - INFO - Exiting the system
+17-02-2025 21:23:10.981 - root - DEBUG - Tables exist
+17-02-2025 21:23:17.382 - Login - DEBUG - Login successful
+17-02-2025 21:23:22.756 - Ride - INFO - Rates configured: Stopped=0.02, Moving=0.05
+17-02-2025 21:23:22.756 - Program - INFO - Ride starts
+17-02-2025 21:23:25.677 - Ride - INFO - Taxi in movement
+17-02-2025 21:23:25.716 - Ride - INFO - Trip added to txt history
+17-02-2025 21:23:25.723 - Ride - INFO - Trip added to SQL history
+17-02-2025 21:23:32.695 - Ride - DEBUG - Trip ended. Stopped fare=0.00 sec, Moving fare=0.06 sec, Total=0.06€
+17-02-2025 21:23:53.075 - Program - INFO - Exiting the system

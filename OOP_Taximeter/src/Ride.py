@@ -1,5 +1,4 @@
 import time
-import locale # Para configurar el formato local, utilizado para mostrar cantidades monetarias.
 import os
 import datetime
 import logging
@@ -86,19 +85,19 @@ class Ride:
 
 ###  Calcula el costo total del viaje basándose en los tiempos de movimiento y espera.
     def calculate_fare(self):
-        #locale.setlocale(locale.LC_ALL, '')
-        locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
         moving_fare = self.time_moving * self.moving_fare
         stopped_fare = self.time_waiting * self.waiting_fare
         total_fare = stopped_fare + moving_fare
         print(f"\033[94mTotal movement time: {self.time_moving:.2f} seconds\033[0m")
         print(f"\033[94mTotal waiting time: {self.time_waiting:.2f} seconds\033[0m")
-        print(f"\033[94mTotal fare: {locale.currency(total_fare)}\033[0m")
+        print(f"\033[94mTotal fare: {total_fare:.2f}€\033[0m")
         self.save_trip(total_fare)
         print()
         input("Press Enter to continue ")
         os.system('cls' if os.name == 'nt' else 'clear')
-        self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={locale.currency(total_fare)}")
+        self.logger.debug(f"Trip ended. Stopped fare={stopped_fare:.2f} sec, Moving fare={moving_fare:.2f} sec, Total={total_fare:.2f}€")
+    
+
 
 ### Registra el viaje en un archivo de texto y en la base de datos.
     def save_trip(self, total_fare):
