@@ -86,7 +86,8 @@ class Ride:
 
 ###  Calcula el costo total del viaje basándose en los tiempos de movimiento y espera.
     def calculate_fare(self):
-        locale.setlocale(locale.LC_ALL, '')
+        #locale.setlocale(locale.LC_ALL, '')
+        locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
         moving_fare = self.time_moving * self.moving_fare
         stopped_fare = self.time_waiting * self.waiting_fare
         total_fare = stopped_fare + moving_fare
