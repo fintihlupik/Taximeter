@@ -1,0 +1,6 @@
+OOP_Taximeter/logs/
+OOP_Taximeter/persistence/
+*.pyc
+__pycache__/
+.DS_Store
+
