@@ -20,14 +20,21 @@ A nivel de implementación utiliza:
 ## Despliegue
 La aplicación está dockerizada para facilitar su despliegue y portabilidad.
 
-Pasos a seguir en el terminal para su ejecución:
+Pasos a seguir en el terminal para su ejecución (asegurate de tener Docker corriendo):
 
-1. Paso 1 - clonar el repositorio
+1. Clonar el repositorio
+   
    `git clone https://github.com/fintihlupik/Taximeter.git taximeter`
-2. Paso 2 - accede a la carpeta
+   
+3. Acceder a la carpeta
+   
    `cd taximeter`
-4. Paso 3 - construir la imagen
+   
+4. Construir la imagen
+   
   `docker build -t taximeterfintihlupik .`
-5. Paso 4 - crear y ejecutar un nuevo contenedor a partir de la imagen
+  
+5. Crear y ejecutar un nuevo contenedor a partir de la imagen
+   
    `docker run -it taximeterfintihlupik`
 
