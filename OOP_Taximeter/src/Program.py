@@ -1,9 +1,9 @@
-from Ride import Ride
+from src.Ride import Ride
 import os
 import time
 import logging
-from settings import create_tables
-from Login import Login
+from src.settings import create_tables
+from src.Login import Login
 import sqlite3
 
 ### Esta clase maneja la lógica principal del programa, incluyendo el menú, la autenticación y el inicio de viajes.
@@ -145,12 +145,4 @@ class Program:
             option = self.menu(['t', 'h', 'q'])
             if option == 'q':
                 self.goodbye()
-
-if __name__ == "__main__":
-    program = Program()
-    create_tables()
-    program.main()
-
-
-
 

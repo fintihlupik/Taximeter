@@ -3,7 +3,7 @@ import locale # Para configurar el formato local, utilizado para mostrar cantida
 import os
 import datetime
 import logging
-from Login import Login
+from src.Login import Login
 import sqlite3
 
 ### Hace el seguimiento de un viaje en taxi: el tiempo de movimiento y espera, el cálculo del costo total y el registro del viaje en el fichero y en la base de datos.
