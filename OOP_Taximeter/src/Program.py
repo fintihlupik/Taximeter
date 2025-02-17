@@ -64,7 +64,7 @@ class Program:
     def view_history(self):
         os.system('cls' if os.name == 'nt' else 'clear')      
 
-        history_path = os.path.abspath(f"persistence\\history\\{Login.username}_rides.txt")
+        history_path = os.path.abspath(f"persistence/history/{Login.username}_rides.txt")
       
         try:
             if sys.platform == 'win32':
